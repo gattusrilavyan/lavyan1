@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lavyan</title>
+
+<style>
+body {
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background: radial-gradient(circle at top, #020617, #000);
+    color:white;
+}
+
+/* 🚀 MODERN INTRO */
+.intro {
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:black;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    animation: fadeOut 4s forwards;
+}
+
+/* LOGO */
+.logo {
+    font-size:60px;
+    font-weight:bold;
+    color:cyan;
+    text-shadow:0 0 20px cyan, 0 0 40px blue;
+    animation: glitch 1s infinite alternate;
+}
+
+@keyframes glitch {
+    0% {transform:translate(0);}
+    20% {transform:translate(-2px,2px);}
+    40% {transform:translate(2px,-2px);}
+    60% {transform:translate(-1px,1px);}
+    80% {transform:translate(1px,-1px);}
+    100% {transform:translate(0);}
+}
+
+.loading {
+    width:200px;
+    height:5px;
+    background:#111;
+    margin-top:20px;
+    border-radius:5px;
+    overflow:hidden;
+}
+
+.loading div {
+    height:100%;
+    width:0;
+    background:cyan;
+    animation: load 3s linear forwards;
+}
+
+@keyframes load {
+    to {width:100%;}
+}
+
+@keyframes fadeOut {
+    0% {opacity:1;}
+    85% {opacity:1;}
+    100% {opacity:0; visibility:hidden;}
+}
+
+/* HEADER */
+h1 {
+    text-align:center;
+    margin-top:20px;
+    text-shadow:0 0 15px cyan;
+}
+
+/* SEARCH */
+.search-box {
+    text-align:center;
+    margin:20px;
+    position:relative;
+}
+
+input {
+    width:400px;
+    padding:12px;
+    border-radius:30px;
+    border:none;
+    outline:none;
+    box-shadow:0 0 10px cyan;
+}
+
+/* Suggestions */
+.suggestions {
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    width:400px;
+    background:#0f172a;
+    border-radius:10px;
+    display:none;
+    box-shadow:0 0 10px cyan;
+    overflow:hidden;
+}
+
+.suggestions div {
+    padding:10px;
+    cursor:pointer;
+}
+
+.suggestions div:hover {
+    background:#1e293b;
+}
+
+/* GRID */
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(120px,1fr));
+    gap:20px;
+    padding:20px;
+}
+
+.app {
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.app:hover {
+    transform:scale(1.1);
+    box-shadow:0 0 15px cyan;
+}
+
+/* COLORS */
+.youtube {background:red;}
+.instagram {background:purple;}
+.facebook {background:#1877f2;}
+.whatsapp {background:#25d366;}
+.twitter {background:#1da1f2;}
+.amazon {background:#ff9900;}
+
+</style>
+
+<script>
+const apps = {
+    youtube:"https://www.youtube.com/",
+    instagram:"https://www.instagram.com/",
+    facebook:"https://www.facebook.com/",
+    whatsapp:"https://web.whatsapp.com/",
+    twitter:"https://twitter.com/",
+    amazon:"https://www.amazon.in/"
+};
+
+function openApp(name){
+    window.open(apps[name], "_blank");
+}
+
+/* 🔍 FIXED SEARCH */
+function showSuggestions(){
+    let input = document.getElementById("search").value.toLowerCase();
+    let box = document.getElementById("suggestions");
+    box.innerHTML = "";
+
+    if(!input){
+        box.style.display="none";
+        return;
+    }
+
+    let results = Object.keys(apps).filter(app => app.includes(input));
+
+    if(results.length === 0){
+        box.style.display="none";
+        return;
+    }
+
+    results.forEach(app => {
+        let div = document.createElement("div");
+        div.textContent = app;
+
+        div.onclick = () => {
+            document.getElementById("search").value = app;
+            box.style.display="none";
+            openApp(app);
+        };
+
+        box.appendChild(div);
+    });
